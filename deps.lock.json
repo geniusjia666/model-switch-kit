@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "codex_version": "0.159.2",
+  "cursor_version": "2026.10.14-941492e",
+  "magpie_version": "0.1.1257",
+  "cursor_plugin": "@magpie-community/opencode-cursor-auth@0.2.13",
+  "platforms": {
+    "linux-x64": {
+      "codex": {
+        "file": "codex-0.159.2-linux-x64.tgz",
+        "url": "https://registry.npmjs.org/@openai/codex/-/codex-0.159.2-linux-x64.tgz",
+        "integrity": "sha512-RrCZ1X52wpa1lOsXtCtSyhjOFdQPh7LH5Ccv8HsKmd/2UXbUwxXFqWXFK3JzatquUNGtW/TLox5Y7qVOGkV0/Q==",
+        "executable": "package/vendor/x86_64-unknown-linux-musl/bin/codex"
+      },
+      "cursor": {
+        "file": "cursor-linux-x64.tar.gz",
+        "url": "https://downloads.cursor.com/lab/2026.10.14-941492e/linux/x64/agent-cli-package.tar.gz",
+        "sha256": "6f6bf39dd2df29dcd38643cdfab0155ce71699953889f732deec123f6562bb2d"
+      },
+      "magpie": {
+        "file": "magpie-cli-linux-amd64-0.1.1257",
+        "url": "https://github.com/yetone/magpie-releases/releases/download/v0.1.1257/magpie-cli-linux-amd64",
+        "sha256": "eba3f7ea72ab50151b62f5bc9ce44d5bdd308b79a5f02bacdf380557e6acb777"
+      }
+    },
+    "linux-arm64": {
+      "codex": {
+        "file": "codex-0.159.2-linux-arm64.tgz",
+        "url": "https://registry.npmjs.org/@openai/codex/-/codex-0.159.2-linux-arm64.tgz",
+        "integrity": "sha512-Pm0W2PnFeTEqPx+AOIwgOVB4dBtY24cuD0tx1hjCor60CbSAT7WBPZVNUINSrTCDrMndvQC67p71ZEz+gmPPkA==",
+        "executable": "package/vendor/aarch64-unknown-linux-musl/bin/codex"
+      },
+      "cursor": {
+        "file": "cursor-linux-arm64.tar.gz",
+        "url": "https://downloads.cursor.com/lab/2026.10.14-941492e/linux/arm64/agent-cli-package.tar.gz",
+        "sha256": "cbba40d90d7f699874e133a5c15bf3854cee006565bd3bb00a6c79b49d62b0d0"
+      },
+      "magpie": {
+        "file": "magpie-cli-linux-arm64-0.1.1257",
+        "url": "https://github.com/yetone/magpie-releases/releases/download/v0.1.1257/magpie-cli-linux-arm64",
+        "sha256": "ea519e29040a3405bbd3fb49f6e386710bc3791f36efc72d214d104f853ace0e"
+      }
+    },
+    "darwin-x64": {
+      "codex": {
+        "file": "codex-0.159.2-darwin-x64.tgz",
+        "url": "https://registry.npmjs.org/@openai/codex/-/codex-0.159.2-darwin-x64.tgz",
+        "integrity": "sha512-VPZGYHH2yVn8S3IuxJk38vxhBADJZp68IBL8hr4quJ2R7jM16l43TLCwRemN+1J27V/cs771fbx63aGRf5F8JA==",
+        "executable": "package/vendor/x86_64-apple-darwin/bin/codex"
+      },
+      "cursor": {
+        "file": "cursor-darwin-x64.tar.gz",
+        "url": "https://downloads.cursor.com/lab/2026.10.14-941492e/darwin/x64/agent-cli-package.tar.gz",
+        "sha256": "10fbd5d213ab7edfc7377dd00d32e856d8a99c2ec42c3b4d265338c9e533f723"
+      },
+      "magpie": {
+        "file": "magpie-cli-darwin-amd64-0.1.1257",
+        "url": "https://github.com/yetone/magpie-releases/releases/download/v0.1.1257/magpie-cli-darwin-amd64",
+        "sha256": "cef10574d34c0148d4a2ba7d4e722189001915df88802765b6cb69e9e564a8b2"
+      }
+    },
+    "darwin-arm64": {
+      "codex": {
+        "file": "codex-0.159.2-darwin-arm64.tgz",
+        "url": "https://registry.npmjs.org/@openai/codex/-/codex-0.159.2-darwin-arm64.tgz",
+        "integrity": "sha512-7SPaPFU0tdqapQ5VEgrF+wb+p9dxfWfLMXMKZMRKoWPn/tLMajlMjYBBnu8o6VtaVH2DHQ6kpnp5TMkv5bqvrg==",
+        "executable": "package/vendor/aarch64-apple-darwin/bin/codex"
+      },
+      "cursor": {
+        "file": "cursor-darwin-arm64.tar.gz",
+        "url": "https://downloads.cursor.com/lab/2026.10.14-941492e/darwin/arm64/agent-cli-package.tar.gz",
+        "sha256": "c6d9e2eaa1b1e24221517e0b4206b1f1593792e6f0d8a52e9b507bbe7ab0cc77"
+      },
+      "magpie": {
+        "file": "magpie-cli-darwin-arm64-0.1.1257",
+        "url": "https://github.com/yetone/magpie-releases/releases/download/v0.1.1257/magpie-cli-darwin-arm64",
+        "sha256": "9c34ba8ff6a869a2492e627c7833632b84f332493bcb132d61a30dba41e40e8d"
+      }
+    }
+  }
+}

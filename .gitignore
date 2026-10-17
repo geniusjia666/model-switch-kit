@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+vendor/*
+!vendor/.gitkeep
+.DS_Store
+.env
+.env.*
+state.json
+backups/
+*.log
+*.sqlite
+*.sqlite3
+*.pem
+*.key

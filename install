@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Bootstrap Python only when needed; never run a downloaded installer script.
+set -euo pipefail
+KIT_SOURCE=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+KIT_PREFIX="${MODEL_SWITCH_PREFIX:-${HOME}/.local/share/model-switch-kit}"
+KIT_CHECK=0
+KIT_ARGS=("$@")
+while (($#)); do
+  case "$1" in
+    --prefix) KIT_PREFIX="$2"; shift 2 ;;
+    --check) KIT_CHECK=1; shift ;;
+    *) shift ;;
+  esac
+done
+case "$KIT_PREFIX" in /*) ;; *) echo '--prefix must be absolute' >&2; exit 2;; esac
+case "$KIT_PREFIX" in /|"$HOME"|"$KIT_SOURCE"|"$KIT_SOURCE"/*) echo 'Use a private install directory outside the source tree.' >&2; exit 2;; esac
+case "$(uname -s)" in Linux) KIT_OS=linux;; Darwin) KIT_OS=darwin;; *) echo 'Supported: Linux/macOS; on Windows use WSL2.' >&2; exit 2;; esac
+KIT_PYTHON=''
+for candidate in "${MODEL_SWITCH_PYTHON:-python3}" "$KIT_PREFIX"/bootstrap/python/*/bin/python3; do
+  if "$candidate" -c 'import sys,tarfile; raise SystemExit(sys.version_info < (3,11) or not hasattr(tarfile,"data_filter"))' >/dev/null 2>&1; then
+    KIT_PYTHON="$candidate"; break
+  fi
+done
+if [[ -z "$KIT_PYTHON" ]]; then
+  if ((KIT_CHECK)); then echo 'Python >= 3.11 missing; install will bootstrap a private runtime.'; exit 3; fi
+  command -v curl >/dev/null || { echo 'curl is required.' >&2; exit 2; }
+  case "$KIT_OS/$(uname -m)" in
+    linux/x86_64) KIT_TARGET=x86_64-unknown-linux-gnu; KIT_SHA=2cf10babba653310606f8b49876cfb679928669e7ddaa1fb41fb00ce73e64f66;;
+    linux/aarch64|linux/arm64) KIT_TARGET=aarch64-unknown-linux-gnu; KIT_SHA=9db0c2f6683099f86bfeea47f4134e915f382512278de95b2a0e625957594ff3;;
+    darwin/x86_64) KIT_TARGET=x86_64-apple-darwin; KIT_SHA=58b1d4a25aa8ff99147c2550b33dcf730207fe7e0f9a0d5d36a1bbf36b845aca;;
+    darwin/arm64) KIT_TARGET=aarch64-apple-darwin; KIT_SHA=dc098ff224d78ed418e121fd374f655949d2c7031a70f6f6604eaf016a130433;;
+    *) echo 'Unsupported CPU architecture.' >&2; exit 2;;
+  esac
+  umask 077
+  mkdir -p "$KIT_PREFIX/bootstrap"
+  KIT_STAGE=$(mktemp -d "$KIT_PREFIX/bootstrap/uv.XXXXXX")
+  KIT_ARCHIVE="$KIT_STAGE/uv.tar.gz"
+  KIT_VENDOR="$KIT_SOURCE/vendor/uv-$KIT_TARGET.tar.gz"
+  if [[ -f "$KIT_VENDOR" ]]; then cp "$KIT_VENDOR" "$KIT_ARCHIVE";
+  else curl -fLsS --retry 2 --connect-timeout 20 --max-time 300 "https://github.com/astral-sh/uv/releases/download/0.9.5/uv-$KIT_TARGET.tar.gz" -o "$KIT_ARCHIVE"; fi
+  if command -v sha256sum >/dev/null; then KIT_ACTUAL=$(sha256sum "$KIT_ARCHIVE");
+  else KIT_ACTUAL=$(shasum -a 256 "$KIT_ARCHIVE"); fi
+  [[ "${KIT_ACTUAL%% *}" == "$KIT_SHA" ]] || { echo 'uv checksum mismatch; not executed.' >&2; exit 2; }
+  tar -xzf "$KIT_ARCHIVE" -C "$KIT_STAGE"
+  "$KIT_STAGE/uv-$KIT_TARGET/uv" --no-config --cache-dir "$KIT_PREFIX/bootstrap/cache" python install 3.13.9 --no-bin --install-dir "$KIT_PREFIX/bootstrap/python"
+  for candidate in "$KIT_PREFIX"/bootstrap/python/*/bin/python3; do
+    if "$candidate" -c 'import tomllib' >/dev/null 2>&1; then KIT_PYTHON="$candidate"; break; fi
+  done
+  [[ -n "$KIT_PYTHON" ]] || { echo 'Private Python bootstrap failed.' >&2; exit 2; }
+fi
+exec "$KIT_PYTHON" -B "$KIT_SOURCE/setup.py" "${KIT_ARGS[@]}"
